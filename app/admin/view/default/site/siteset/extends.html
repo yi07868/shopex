@@ -1,0 +1,119 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <!-- second nav start -->
+    {{include file="site/public/nav" /}}
+    <!-- second nav end -->
+
+    <div class="content">
+        <!-- nav start -->
+        {{include file="site/public/siteset_nav" /}}
+        <!-- nav end -->
+
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/site/save')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/site/index', ['nav_type'=>$nav_type, 'view_type'=>$view_type])}}" enctype="multipart/form-data">
+            <!-- 基础配置 -->
+            <div class="am-panel am-panel-default am-margin-top-sm">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">基础配置</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>{{$data.home_index_friendship_link_status.name}}<span class="am-form-group-label-tips">{{$data.home_index_friendship_link_status.describe}}</span></label>
+                        <select name="{{$data.home_index_friendship_link_status.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_index_friendship_link_status.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_index_friendship_link_status']['value']) and $data['home_index_friendship_link_status']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label>{{$data.common_is_pay_price_must_max_equal.name}}<span class="am-form-group-label-tips">{{$data.common_is_pay_price_must_max_equal.describe}}</span></label>
+                        <select name="{{$data.common_is_pay_price_must_max_equal.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.common_is_pay_price_must_max_equal.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['common_is_pay_price_must_max_equal']['value']) and $data['common_is_pay_price_must_max_equal']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label>{{$data.home_header_top_is_home.name}}<span class="am-form-group-label-tips">{{$data.home_header_top_is_home.describe}}</span></label>
+                        <select name="{{$data.home_header_top_is_home.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_header_top_is_home.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_header_top_is_home']['value']) and $data['home_header_top_is_home']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快捷导航 -->
+            <div class="am-panel am-panel-default am-margin-top-sm">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">快捷导航</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>{{$data.home_navigation_main_quick_status.name}}<span class="am-form-group-label-tips">{{$data.home_navigation_main_quick_status.describe}}</span></label>
+                        <select name="{{$data.home_navigation_main_quick_status.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_navigation_main_quick_status.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_navigation_main_quick_status']['value']) and $data['home_navigation_main_quick_status']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{$data.home_navigation_main_quick_name.name}}<span class="am-form-group-label-tips">{{$data.home_navigation_main_quick_name.describe}}</span></label>
+                        <input type="text" maxlength="4" name="{{$data.home_navigation_main_quick_name.only_tag}}" placeholder="{{$data.home_navigation_main_quick_name.name}}" data-validation-message="{{$data.home_navigation_main_quick_name.error_tips}}" class="am-radius" {{if !empty($data)}}value="{{$data.home_navigation_main_quick_name.value}}"{{/if}} />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户地址 -->
+            <div class="am-panel am-panel-default am-margin-top-sm">
+                <div class="am-panel-hd">
+                    <h3 class="am-panel-title">用户地址</h3>
+                </div>
+                <div class="am-panel-bd am-padding-vertical-xs">
+                    <div class="am-form-group">
+                        <label>{{$data.home_user_address_map_status.name}}<span class="am-form-group-label-tips">{{$data.home_user_address_map_status.describe}}</span></label>
+                        <select name="{{$data.home_user_address_map_status.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_user_address_map_status.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_user_address_map_status']['value']) and $data['home_user_address_map_status']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                    <div class="am-form-group">
+                        <label>{{$data.home_user_address_idcard_status.name}}<span class="am-form-group-label-tips">{{$data.home_user_address_idcard_status.describe}}</span></label>
+                        <select name="{{$data.home_user_address_idcard_status.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_user_address_idcard_status.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_user_address_idcard_status']['value']) and $data['home_user_address_idcard_status']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label>{{$data.home_extraction_address_position.name}}<span class="am-form-group-label-tips">{{$data.home_extraction_address_position.describe}}</span></label>
+                        <select name="{{$data.home_extraction_address_position.only_tag}}" class="am-radius chosen-select" data-validation-message="{{$data.home_extraction_address_position.error_tips}}" required>
+                            {{foreach $common_close_open_list as $v}}
+                                <option value="{{$v.value}}" {{if isset($data['home_extraction_address_position']['value']) and $data['home_extraction_address_position']['value'] eq $v['value']}}selected{{/if}}>{{$v.name}}</option>
+                            {{/foreach}}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-form-group am-form-group-refreshing am-margin-top-lg am-padding-left-0">
+                <input type="hidden" name="nav_type" value="{{$nav_type}}" />
+                <input type="hidden" name="view_type" value="{{$view_type}}" />
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+        
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

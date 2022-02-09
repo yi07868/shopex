@@ -1,0 +1,63 @@
+<!-- 搜索框 start -->
+<div class="nav-search white am-hide-sm-only">
+    <div class="am-container">
+        <div class="logo am-show-sm-only">
+            <a href="{{$Think.__MY_URL__}}">
+                <img src="{{:AttachmentPathViewHandle(MyC('home_site_logo_wap'))}}" alt="{{:MyC('home_seo_site_title')}}" />
+            </a>
+        </div>
+        <div class="logo-big am-hide-sm-only">
+            <a href="{{$Think.__MY_URL__}}">
+                <img src="{{:AttachmentPathViewHandle(MyC('home_site_logo'))}}" alt="{{:MyC('home_seo_site_title')}}" />
+            </a>
+        </div>
+
+        <!-- logo右侧 -->
+        {{if isset($shopxo_is_develop) and $shopxo_is_develop eq true}}
+            <div class="plugins-tag">
+                <span>plugins_view_common_logo_right</span>
+            </div>
+        {{/if}}
+        {{if !empty($plugins_view_common_logo_right_data) and is_array($plugins_view_common_logo_right_data)}}
+            {{foreach $plugins_view_common_search_right_data as $hook}}
+                {{if is_string($hook) or is_int($hook)}}
+                    {{$hook|raw}}
+                {{/if}}
+            {{/foreach}}
+        {{/if}}
+
+        <div class="search-bar">
+            <form action="{{:MyUrl('index/search/index')}}" method="POST">
+                <div class="search-group">
+                    <input id="search-input" name="wd" type="text" placeholder="其实搜索很简单^_^ !" value="{{if !empty($params['wd'])}}{{$params.wd}}{{/if}}" autocomplete="off" />
+                    <button type="submit" id="ai-topsearch" class="submit am-btn">
+                        <i class="am-icon-search"></i>
+                        <span>搜索</span>
+                    </button>
+                </div>
+                {{if !empty($home_search_keywords)}}
+                    <ul class="search-hot-keywords">
+                        {{foreach $home_search_keywords as $v}}
+                            <li><a href="{{:MyUrl('index/search/index', ['wd'=>StrToAscii($v)])}}" target="_blank">{{$v}}</a></li>
+                        {{/foreach}}
+                    </ul>
+                {{/if}}
+            </form>
+        </div>
+
+        <!-- 公共搜索框右侧 -->
+        {{if isset($shopxo_is_develop) and $shopxo_is_develop eq true}}
+            <div class="plugins-tag">
+                <span>plugins_view_common_search_right</span>
+            </div>
+        {{/if}}
+        {{if !empty($plugins_view_common_search_right_data) and is_array($plugins_view_common_search_right_data)}}
+            {{foreach $plugins_view_common_search_right_data as $hook}}
+                {{if is_string($hook) or is_int($hook)}}
+                    {{$hook|raw}}
+                {{/if}}
+            {{/foreach}}
+        {{/if}}
+    </div>
+</div>
+<!-- 搜索框 end -->

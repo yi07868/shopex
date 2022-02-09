@@ -1,0 +1,389 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right" data-url="{{:MyUrl('admin/index/stats')}}">
+	<div class="content">
+		{{if $is_system_show_base eq 1}}
+			<!-- 顶部提示信息 -->
+			{{if !empty($site_store_info) and !empty($site_store_info['base']) and !empty($site_store_info['base']['site_top_notice'])}}
+				<div class="am-alert am-alert-danger" data-am-alert>
+					<button type="button" class="am-close">&times;</button>
+					<p>{{$site_store_info.base.site_top_notice|raw}}</p>
+				</div>
+			{{/if}}
+
+			<!-- 顶部基础信息 -->
+			<div class="block-container base-content-top am-nbfc">
+				<div class="am-fl am-nbfc left-content">
+					<!-- 帐号信息 -->
+					{{if !empty($site_store_info) and !empty($site_store_info['user'])}}
+						<i class="am-icon-user"></i>
+						<span>{{$site_store_info.user.user_name_view}}</span>
+						<a href="javascript:;" class="am-margin-left-xs store-accounts-event">修改</a>
+					{{else /}}
+						<a href="javascript:;" class="am-margin-left-xs store-accounts-event">绑定ShopXO商店账户</a>
+						<!-- 连接商店错误信息 --->
+						{{if !empty($site_store_error)}}
+							<span class="am-text-danger am-margin-left-sm">{{$site_store_error}}</span>
+						{{/if}}
+					{{/if}}
+
+					<!-- 广告 -->
+					{{if !empty($site_store_info) and !empty($site_store_info['adverts']) and !empty($site_store_info['adverts']['name'])}}
+						<a class="am-margin-left-sm am-text-danger ad-content {{if !empty($site_store_info['adverts']['icon'])}}{{$site_store_info.adverts.icon}}{{/if}}" {{if empty($site_store_info['adverts']['url'])}}href="javascript:;"{{else /}}href="{{$site_store_info.adverts.url}}" target="_blank"{{/if}}> {{$site_store_info.adverts.name}}</a>
+					{{/if}}
+				</div>
+				<div class="am-fr am-nbfc right-content">
+					<!-- VIP授权信息 -->
+					{{if !empty($site_store_info) and !empty($site_store_info['vip']) and !empty($site_store_info['vip']['auth_view'])}}
+						<a class="am-icon-diamond vip {{if isset($site_store_info['vip']['status']) and $site_store_info['vip']['status'] eq 1}}vip-active{{/if}}" {{if empty($site_store_info['vip']['go_url'])}}href="javascript:;"{{else /}}href="{{$site_store_info.vip.go_url}}" target="_blank"{{/if}} {{if !empty($site_store_info['vip']['auth_person'])}}data-am-popover="{content: '授权主体：{{$site_store_info.vip.auth_person}}', trigger: 'hover focus', theme: 'sm'}"{{/if}}> {{$site_store_info.vip.auth_view}}</a>
+					{{/if}}
+
+					<!-- 右侧版本信息及更新检查 -->
+					<span class="right-base">
+						<a {{if !empty($site_store_links) and !empty($site_store_links['system_update_log'])}}href="{{$site_store_links.system_update_log}}" target="_blank"{{else /}}href="javascript:;"{{/if}} class="am-margin-left-xs">{{$Think.APPLICATION_VERSION}}</a>
+						<a href="javascript:;" class="am-margin-left-sm inspect-upgrade-submit" data-url="{{:MyUrl('admin/index/inspectupgrade')}}">检查更新{{if !empty($site_store_info) and !empty($site_store_info['upgrade']) and !empty($site_store_info['upgrade']['version_old']) and $site_store_info['upgrade']['version_old'] eq $Think.APPLICATION_VERSION}}<i></i>{{/if}}</a>
+					</span>
+				</div>
+			</div>
+		{{/if}}
+
+		<!-- 后台公告 -->
+		{{if !empty($admin_notice)}}
+			<div class="am-alert am-alert-danger" data-am-alert>
+				<button type="button" class="am-close">&times;</button>
+				<p>{{$admin_notice|raw}}</p>
+			</div>
+		{{/if}}
+
+		<!-- 是否展示统计数据 -->
+		{{if isset($is_stats) and $is_stats eq 1}}
+			<!-- 基础统计 -->
+			<div class="block-container shopxo-base">
+				<div class="block-title echarts-title">
+					<span class="icon"></span>
+					<span class="title">商城统计</span>
+					<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '时间筛选仅对总数有效', trigger: 'hover focus', theme: 'sm'}"></a>
+					<div class="am-fr right-operate" data-type="base-count" data-empty-time="1">
+					    {{if !empty($time_data)}}
+					        <span class="quick-time">
+					            {{foreach $time_data as $k=>$v}}
+					            	{{if !in_array($k, ['this-month', 'last-month'])}}
+					                	<a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+					            	{{/if}}
+					            {{/foreach}}
+					            <a href="javascript:;" data-start="" data-end="">全部</a>
+					        </span>
+					    {{/if}}
+					    {{include file="/index/stats_where" /}}
+					</div>
+				</div>
+				<ul class="{{if isset($is_income) and $is_income eq true}}am-avg-sm-2 am-avg-lg-4{{else /}}am-avg-sm-1 am-avg-lg-3{{/if}}">
+					<li>
+						<div class="li-content">
+							<p class="name">用户总量</p>
+							<p class="total animation-count-to base-user-count" data-to="{{$base_count.user_count}}" data-speed="1500">0</p>
+							<div class="item am-margin-bottom-xs">
+								<span>上月</span>
+								<span class="animation-count-to" data-to="{{$user.last_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>当月</span>
+								<span class="animation-count-to" data-to="{{$user.same_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>昨日</span>
+								<span class="animation-count-to" data-to="{{$user.yesterday_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item">
+								<span>今日</span>
+								<span class="animation-count-to" data-to="{{$user.today_count}}" data-speed="1500">0</span>
+							</div>
+							<i class="am-icon-user am-icon-lg bg-icon"></i>
+						</div>
+					</li>
+					<li>
+						<div class="li-content">
+							<p class="name">订单总量</p>
+							<p class="total animation-count-to base-order-count" data-to="{{$base_count.order_count}}" data-speed="1500">0</p>
+							<div class="item am-margin-bottom-xs">
+								<span>上月</span>
+								<span class="animation-count-to" data-to="{{$order_number.last_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>当月</span>
+								<span class="animation-count-to" data-to="{{$order_number.same_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>昨日</span>
+								<span class="animation-count-to" data-to="{{$order_number.yesterday_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item">
+								<span>今日</span>
+								<span class="animation-count-to" data-to="{{$order_number.today_count}}" data-speed="1500">0</span>
+							</div>
+							<i class="am-icon-pie-chart am-icon-lg bg-icon"></i>
+						</div>
+					</li>
+					<li>
+						<div class="li-content">
+							<p class="name">成交总量</p>
+							<p class="total animation-count-to base-order-sale-count" data-to="{{$base_count.order_sale_count}}" data-speed="1500">0</p>
+							<div class="item am-margin-bottom-xs">
+								<span>上月</span>
+								<span class="animation-count-to" data-to="{{$order_complete_number.last_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>当月</span>
+								<span class="animation-count-to" data-to="{{$order_complete_number.same_month_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item am-margin-bottom-xs">
+								<span>昨日</span>
+								<span class="animation-count-to" data-to="{{$order_complete_number.yesterday_count}}" data-speed="1500">0</span>
+							</div>
+							<div class="item">
+								<span>今日</span>
+								<span class="animation-count-to" data-to="{{$order_complete_number.today_count}}" data-speed="1500">0</span>
+							</div>
+							<i class="am-icon-gg am-icon-lg bg-icon"></i>
+						</div>
+					</li>
+					<!-- 收入统计权限判断 -->
+					{{if isset($is_income) and $is_income eq true}}
+						<li>
+							<div class="li-content">
+								<p class="name">收入总计</p>
+								<p class="total animation-count-to base-order-complete-total" data-to="{{$base_count.order_complete_total}}" data-speed="1500" data-decimals="2">0.00</p>
+								<div class="item am-margin-bottom-xs">
+									<span>上月</span>
+									<span class="animation-count-to" data-to="{{$order_complete_money.last_month_count}}" data-speed="1500">0</span>
+								</div>
+								<div class="item am-margin-bottom-xs">
+									<span>当月</span>
+									<span class="animation-count-to" data-to="{{$order_complete_money.same_month_count}}" data-speed="1500">0</span>
+								</div>
+								<div class="item am-margin-bottom-xs">
+									<span>昨日</span>
+									<span class="animation-count-to" data-to="{{$order_complete_money.yesterday_count}}" data-speed="1500" data-decimals="2">0.00</span>
+								</div>
+								<div class="item">
+									<span>今日</span>
+									<span class="animation-count-to" data-to="{{$order_complete_money.today_count}}" data-speed="1500" data-decimals="2">0.00</span>
+								</div>
+								<i class="am-icon-line-chart am-icon-lg bg-icon"></i>
+							</div>
+						</li>
+					{{/if}}
+				</ul>
+			</div>
+
+			<!-- 订单成交金额走势，收入统计权限判断-->
+			{{if isset($is_income) and $is_income eq true}}
+				<div class="block-container">
+					<div class="block-title echarts-title">
+						<span class="icon"></span>
+						<span class="title">订单成交金额走势</span>
+						<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '所有订单', trigger: 'hover focus', theme: 'sm'}"></a>
+						<div class="am-fr right-operate" data-type="order-profit" data-init="1">
+						    {{if !empty($time_data)}}
+						        <span class="quick-time">
+						            {{foreach $time_data as $k=>$v}}
+						                <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+						            {{/foreach}}
+						        </span>
+						    {{/if}}
+						    {{include file="/index/stats_where" /}}
+						</div>
+					</div>
+					<div id="echarts-order-profit"></div>
+				</div>
+			{{/if}}
+
+			<!-- 订单交易走势 -->
+			<div class="block-container">
+				<div class="block-title echarts-title">
+					<span class="icon"></span>
+					<span class="title">订单交易走势</span>
+					<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '所有订单', trigger: 'hover focus', theme: 'sm'}"></a>
+					<div class="am-fr right-operate" data-type="order-trading" data-init="1">
+					    {{if !empty($time_data)}}
+					        <span class="quick-time">
+					            {{foreach $time_data as $k=>$v}}
+					                <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+					            {{/foreach}}
+					        </span>
+					    {{/if}}
+					    {{include file="/index/stats_where" /}}
+					</div>
+				</div>
+				<div id="echarts-order-trading"></div>
+			</div>
+
+			<!-- 组合 -->
+			<ul class="am-avg-sm-1 am-avg-sm-2 am-avg-lg-2 block-combination-container-2">
+				<li>
+					<!-- 热销商品 -->
+					<div class="block-title echarts-title">
+						<span class="icon"></span>
+						<span class="title">热销商品</span>
+						<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '不含取消关闭的订单', trigger: 'hover focus', theme: 'sm'}"></a>
+						<div class="am-fr right-operate" data-type="goods-hot" data-init="1" data-empty-time="1">
+						    {{if !empty($time_data)}}
+						        <span class="quick-time">
+						            {{foreach $time_data as $k=>$v}}
+						                <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+						            {{/foreach}}
+						            <a href="javascript:;" data-start="" data-end="">全部</a>
+						        </span>
+						    {{/if}}
+						    {{include file="/index/stats_where" /}}
+						</div>
+					</div>
+					<div id="echarts-goods-hot"></div>
+				</li>
+
+				<li>
+					<!-- 支付方式 -->
+					<div class="block-title echarts-title">
+						<span class="icon"></span>
+						<span class="title">支付方式</span>
+						<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '所有订单', trigger: 'hover focus', theme: 'sm'}"></a>
+						<div class="am-fr right-operate" data-type="pay-type" data-init="1">
+						    {{if !empty($time_data)}}
+						        <span class="quick-time">
+						            {{foreach $time_data as $k=>$v}}
+						                <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+						            {{/foreach}}
+						        </span>
+						    {{/if}}
+						    {{include file="/index/stats_where" /}}
+						</div>
+					</div>
+					<div id="echarts-pay-type"></div>
+				</li>
+			</ul>
+
+			<!-- 订单地域分布 -->
+			<div class="am-nbfc {{if $is_system_show_base eq 0}}am-padding-bottom-sm{{/if}}">
+				<div class="block-container {{if $is_system_show_base eq 0}}am-margin-bottom-0{{/if}}">
+					<div class="block-title echarts-title">
+						<span class="icon"></span>
+						<span class="title">订单地域分布</span>
+						<a href="javascript:;" class="am-icon-question-circle am-text-warning" data-am-popover="{content: '不含取消关闭的订单、默认维度（省）', trigger: 'hover focus', theme: 'sm'}"></a>
+						<select name="value" data-am-selected="{btnWidth: '50px', btnSize: 'xs'}">
+							<option value="0" selected>省</option>
+							<option value="1">市</option>
+							<option value="2">区/县</option>
+						</select>
+						<div class="am-fr right-operate" data-type="order-whole-country" data-init="1" data-empty-time="1">
+						    {{if !empty($time_data)}}
+						        <span class="quick-time">
+						            {{foreach $time_data as $k=>$v}}
+						                <a href="javascript:;" data-start="{{$v.start}}" data-end="{{$v.end}}">{{$v.name}}</a>
+						            {{/foreach}}
+						            <a href="javascript:;" data-start="" data-end="">全部</a>
+						        </span>
+						    {{/if}}
+						    {{include file="/index/stats_where" /}}
+						</div>
+					</div>
+					<div id="echarts-map-whole-country"></div>
+				</div>
+			</div>
+		{{/if}}
+
+		<!-- 系统信息 -->
+		{{if $is_system_show_base eq 1}}
+			<ul class="am-avg-sm-1 am-avg-sm-2 am-avg-lg-2 block-combination-container-2 am-padding-bottom-sm">
+				<li>
+					<div class="block-title">
+						<span class="icon"></span>
+						<span class="title">系统信息</span>
+					</div>
+					<dl class="dl-content">
+						<dt class="am-text-truncate">软件版本</dt>
+						<dd>{{$data.ver}}</dd>
+
+						<dt class="am-text-truncate">操作系统</dt>
+						<dd>{{$data.os_ver}}</dd>
+
+						<dt class="am-text-truncate">PHP版本</dt>
+						<dd>{{$data.php_ver}}</dd>
+
+						<dt class="am-text-truncate">MySQL版本</dt>
+						<dd>{{$data.mysql_ver}}</dd>
+
+						<dt class="am-text-truncate">服务器端信息</dt>
+						<dd>{{$data.server_ver}}</dd>
+
+						<dt class="am-text-truncate">当前域名</dt>
+						<dd>{{$data.host}}</dd>
+					</dl>
+				</li>
+
+				<li>
+					<div class="block-title">
+						<span class="icon"></span>
+						<span class="title">开发团队</span>
+					</div>
+					<dl class="dl-content">
+						<dt class="am-text-truncate">公司官网</dt>
+						<dd>
+							<a href="http://zongzhige.com/" target="_blank">上海纵之格科技有限公司</a>
+						</dd>
+
+						<dt class="am-text-truncate">技术支持</dt>
+						<dd>
+							<a href="http://shopxo.net/" target="_blank">ShopXO企业级电商系统提供商</a>
+						</dd>
+
+						{{if !empty($site_store_links) and !empty($site_store_links['community_website'])}}
+							<dt class="am-text-truncate">交流社区</dt>
+							<dd>
+								<a href="{{$site_store_links.community_website}}" target="_blank">ShopXO交流社区</a>
+							</dd>
+						{{/if}}
+
+						<dt class="am-text-truncate">开源协议</dt>
+						<dd>
+							<a href="{{if !empty($site_store_links) and !empty($site_store_links['source_license'])}}{{$site_store_links.source_license}}{{else /}}https://opensource.org/licenses/mit-license.php{{/if}}" target="_blank">查看开源协议</a>
+						</dd>
+
+						{{if !empty($site_store_links) and !empty($site_store_links['system_update_log'])}}
+							<dt class="am-text-truncate">更新日志</dt>
+							<dd>
+								<a href="{{$site_store_links.system_update_log}}" target="_blank">查看更新日志</a>
+							</dd>
+						{{/if}}
+
+						<dt class="am-text-truncate">研发成员</dt>
+						<dd>
+							<a href="http://gong.gg/" target="_blank">龚哥哥</a>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+		{{/if}}
+	</div>
+</div>
+<!-- right content end  -->
+
+<!-- 检查更新显示信息 -->
+<div class="am-popup popup-not-title" id="inspect-upgrade-popup">
+    <div class="am-popup-inner">
+        <span data-am-modal-close class="am-close am-close-alt am-icon-times"></span>
+        <div class="am-popup-bd">
+        	<div class="upgrade-content"></div>
+			<div class="upgrade-bottom am-text-right">
+				<div class="upgrade-bottom-content">
+					<button type="button" class="am-btn am-btn-default am-radius am-btn-xs" data-am-modal-close>取消</button>
+					<button type="button" class="am-btn am-btn-success am-radius am-btn-xs am-margin-left-sm am-hide inspect-upgrade-confirm" data-url="{{:MyUrl('admin/index/inspectupgradeconfirm')}}">立即更新</button>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

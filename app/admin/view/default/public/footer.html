@@ -1,0 +1,182 @@
+<!-- 应用商店账户绑定 -->
+<div class="am-popup popup-not-title" id="store-accounts-popup">
+    <div class="am-popup-inner">
+        {{if empty($site_store_info) or empty($site_store_info['base']) or !isset($site_store_info['base']['is_user_not_cloae_accounts_popup']) or $site_store_info['base']['is_user_not_cloae_accounts_popup'] eq 0}}
+            <span data-am-modal-close class="am-close am-close-alt am-icon-times"></span>
+        {{/if}}
+        <div class="am-popup-bd">
+            <!-- form start -->
+            <form class="am-form form-validation-store-accounts view-save" action="{{:MyUrl('admin/index/storeaccountsbind')}}" method="POST" request-type="ajax-reload">
+                <div class="am-form-group am-form-group-refreshing business-form-block am-margin-top-xs">
+                    <label>账号<span class="am-form-group-label-tips-must">必填</span></label>
+                    <input type="text" name="common_store_accounts" placeholder="用户名/手机/邮箱" data-validation-message="账号格式1~30个字符" class="am-radius" value="" required />
+                </div>
+                <div class="am-form-group am-form-group-refreshing business-form-block am-margin-top-xs">
+                    <label>密码<span class="am-form-group-label-tips-must">必填</span></label>
+                    <input type="password" name="common_store_password" placeholder="登录密码" data-validation-message="登录密码格式6~30个字符" class="am-radius" value="" required />
+                </div>
+                
+                <div class="am-form-group am-form-group-refreshing am-margin-top-sm">
+                    <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm am-btn-block" data-am-loading="{loadingText:'绑定中...'}">绑定</button>
+                </div>
+                <div class="am-margin-top-xr am-text-right am-padding-right-xs">
+                    <a href="{{:MyConfig('shopxo.store_regster_url')}}" target="_blank">未有账号，去注册</a>
+                </div>
+                <p class="am-text-warning am-text-center am-margin-top-sm">一个账号支持绑定多台ShopXO商城</p>
+            </form>
+            <!-- form end -->
+        </div>
+    </div>
+</div>
+
+<!-- 插件包更新弹窗 -->
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="package-upgrade-modal">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">
+            <a href="javascript: void(0)" class="am-close" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+            <p class="am-margin-bottom-sm"><strong class="upgrade-name">...</strong></p>
+            <div class="am-scrollable-vertical am-text-left"></div>
+            <div class="am-text-left am-nbfc am-margin-top-sm">
+                <span class="am-icon-calendar-check-o upgrade-date"> ...</span>
+                <span class="am-icon-vimeo am-margin-left-sm upgrade-version"> ...</span>
+                <div class="am-fr">
+                    <button type="button" class="am-btn am-btn-default am-radius am-btn-xs" data-am-modal-close>取消</button>
+                    <button type="button" class="am-btn am-btn-success am-radius am-btn-xs am-margin-left-sm package-upgrade-submit" data-type="" data-value="" data-url="{{:MyUrl('admin/packageupgrade/upgrade')}}">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- commom html -->
+<textarea id="upload-editor-view" data-url="{{if isset($is_load_upload_editor) and $is_load_upload_editor eq 1}}{{:MyUrl('admin/ueditor/index', ['path_type'=>empty($editor_path_type) ? 'common' : $editor_path_type])}}{{/if}}" style="display: none;"></textarea>
+
+<!-- 公共底部钩子 -->
+{{if !empty($plugins_admin_view_common_bottom_data) and is_array($plugins_admin_view_common_bottom_data)}}
+    {{foreach $plugins_admin_view_common_bottom_data as $hook}}
+        {{if is_string($hook) or is_int($hook)}}
+            {{$hook|raw}}
+        {{/if}}
+    {{/foreach}}
+{{/if}}
+
+</body>
+</html>
+
+<!-- 类库 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/jquery/jquery-2.1.0.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/assets/js/amazeui.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- echarts 图表 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/echarts/echarts.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/echarts/macarons.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- ueditor 编辑器 -->
+<script type='text/javascript' src="{{$my_public_url}}static/common/lib/ueditor/ueditor.config.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/ueditor/ueditor.all.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/ueditor/lang/zh-cn/zh-cn.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 颜色选择器 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/colorpicker/jquery.colorpicker.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 元素拖拽排序插件 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/dragsort/jquery.dragsort-0.5.2.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 动画数数 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/animation-count-to/animation.count.to.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- amazeui插件 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/amazeui-switch/amazeui.switch.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/amazeui-chosen/amazeui.chosen.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/amazeui-dialog/amazeui.dialog.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/common/lib/amazeui-tagsinput/amazeui.tagsinput.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 日期组件 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/My97DatePicker/WdatePicker.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 元素拖动 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/tdrag/tdrag.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 复制插件 -->
+<script type='text/javascript' src="{{$public_host}}static/common/lib/clipboard/clipboard.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- baidu map -->
+{{if isset($is_load_baidu_map_api) and $is_load_baidu_map_api eq 1}}
+    <script type="text/javascript" src="{{$Think.__MY_HTTP__}}://api.map.baidu.com/api?v=2.0&ak={{:MyC('common_baidu_map_ak')}}"></script>
+{{/if}}
+
+<!-- 隐藏编辑器初始化 -->
+<script type="text/javascript">
+    var upload_editor = UE.getEditor("upload-editor-view", {
+        isShow: false,
+        focus: false,
+        enableAutoSave: false,
+        autoSyncData: false,
+        autoFloatEnabled:false,
+        wordCount: false,
+        sourceEditor: null,
+        scaleEnabled:true,
+        toolbars: [["insertimage", "insertvideo", "attachment"]]
+    });
+</script>
+
+<!-- 项目公共 -->
+<script type='text/javascript' src="{{$public_host}}static/common/js/common.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$public_host}}static/admin/{{$default_theme}}/js/common.js?v={{:MyC('home_static_cache_version')}}"></script>
+{{if isset($is_load_layout_admin) and $is_load_layout_admin eq 1}}
+    <script type='text/javascript' src="{{$public_host}}static/common/js/layout.admin.js?v={{:MyC('home_static_cache_version')}}"></script>
+{{/if}}
+
+<!-- 应用插件公共js -->
+{{if !empty($plugins_js)}}
+    <script type='text/javascript' src="{{$public_host}}static/{{$plugins_js}}?v={{:MyC('home_static_cache_version')}}"></script>
+{{/if}}
+
+<!-- 当前控制器js -->
+{{if !empty($module_js)}}
+    <script type='text/javascript' src="{{$public_host}}static/{{$module_js}}?v={{:MyC('home_static_cache_version')}}"></script>
+{{/if}}
+
+<!-- js钩子 -->
+{{if !empty($plugins_admin_js_data) and is_array($plugins_admin_js_data)}}
+    {{foreach $plugins_admin_js_data as $hook}}
+        {{if !empty($hook) and is_string($hook)}}
+            {{if substr($hook, 0, 4) eq 'http'}}
+                <script type='text/javascript' src="{{$hook}}?v={{:MyC('home_static_cache_version')}}"></script>
+            {{else /}}
+                <script type='text/javascript' src="{{$public_host}}{{$hook}}?v={{:MyC('home_static_cache_version')}}"></script>
+            {{/if}}
+        {{elseif is_array($hook) /}}
+            {{foreach $hook as $hook_js}}
+                {{if !empty($hook_js) and is_string($hook_js)}}
+                    {{if substr($hook_js, 0, 4) eq 'http'}}
+                        <script type='text/javascript' src="{{$hook_js}}?v={{:MyC('home_static_cache_version')}}"></script>
+                    {{else /}}
+                        <script type='text/javascript' src="{{$public_host}}{{$hook_js}}?v={{:MyC('home_static_cache_version')}}"></script>
+                    {{/if}}
+                {{/if}}
+            {{/foreach}}
+        {{/if}}
+    {{/foreach}}
+{{/if}}
+
+<!-- 公共页面底部钩子 -->
+{{if !empty($plugins_admin_common_page_bottom_data) and is_array($plugins_admin_common_page_bottom_data)}}
+    {{foreach $plugins_admin_common_page_bottom_data as $hook}}
+        {{if is_string($hook) or is_int($hook)}}
+            {{$hook|raw}}
+        {{/if}}
+    {{/foreach}}
+{{/if}}
+
+<script type="text/javascript">
+$(function()
+{
+    // 绑定商店帐号
+    {{if !empty($site_store_info) and !empty($site_store_info['base']) and isset($site_store_info['base']['is_user_force_bind_accounts']) and $site_store_info['base']['is_user_force_bind_accounts'] eq 1 and !in_array($module_name.$controller_name.$action_name, ['adminindexindex', 'adminadminlogininfo']) and empty($site_store_info['user'])}}
+        StoreAccountsPopupOpen();
+    {{/if}}
+});
+</script>
